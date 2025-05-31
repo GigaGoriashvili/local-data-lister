@@ -126,12 +126,12 @@
 ## 📅 4-Week Development Plan
 
 ### Week 1: Planning & Setup
-- [ ] Project repository setup (monorepo structure or separate frontend/backend).
-- [ ] Initialize React + TypeScript frontend and Node.js + TypeScript backend projects.
-- [ ] Set up **MongoDB Atlas** account and create a new cluster.
-- [ ] Define `LocalItem` TypeScript interface and **Mongoose schema**.
-- [ ] Initial test framework setup (Jest, React Testing Library, Supertest).
-- [ ] Environment configuration (e.g., using `dotenv` for MongoDB connection string).
+- [x] Project repository setup (monorepo structure or separate frontend/backend).
+- [x] Initialize React + TypeScript frontend and Node.js + TypeScript backend projects.
+- [x] Set up **MongoDB Atlas** account and create a new cluster.
+- [x] Define `LocalItem` TypeScript interface and **Mongoose schema**.
+- [x] Initial test framework setup (Jest, React Testing Library, Supertest).
+- [x] Environment configuration (e.g., using `dotenv` for MongoDB connection string).
 
 ### Week 2: Minimal App + Testing
 - [ ] **Backend**: Implement MongoDB connection logic using Mongoose.
