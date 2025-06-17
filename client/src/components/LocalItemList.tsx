@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import SearchFilter from './SearchFilter';
 import LocalItem from './LocalItem';
 import type { LocalItem as ILocalItem } from '../types/localItem';
 
@@ -9,7 +10,8 @@ const LocalItemList: React.FC = () => {
   const [items, setItems] = useState<ILocalItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -25,6 +27,19 @@ const LocalItemList: React.FC = () => {
     fetchItems();
   }, []);
 
+  const filteredItems = useMemo(() => {
+    if (!searchTerm) {
+      return items;
+    }
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return items.filter(item =>
+      item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+      item.type.toLowerCase().includes(lowerCaseSearchTerm) ||
+      item.description.toLowerCase().includes(lowerCaseSearchTerm) ||
+      item.tags.some(tag => tag.toLowerCase().includes(lowerCaseSearchTerm))
+    );
+  }, [items, searchTerm]); // Recalculate only when items or searchTerm changes
+
   if (loading) {
     return <div>Loading local data...</div>;
   }
@@ -33,18 +48,20 @@ const LocalItemList: React.FC = () => {
     return <div style={{ color: 'red' }}>Error: {error}</div>;
   }
 
-  if (items.length === 0) {
-    return <div>No local items found.</div>;
-  }
-
   return (
     <div>
       <h2>Local Items</h2>
-      {items.map((item) => (
-        <LocalItem key={item._id} item={item} />
-      ))}
+      <SearchFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} /> {/* Integrate SearchFilter */}
+      {filteredItems.length === 0 ? (
+        <div>No matching items found.</div>
+      ) : (
+        filteredItems.map((item) => (
+          <LocalItem key={item._id} item={item} />
+        ))
+      )}
     </div>
   );
 };
+
 
 export default LocalItemList;
