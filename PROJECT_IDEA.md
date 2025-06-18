@@ -134,14 +134,14 @@
 - [x] Environment configuration (e.g., using `dotenv` for MongoDB connection string).
 
 ### Week 2: Minimal App + Testing
-- [ ] **Backend**: Implement MongoDB connection logic using Mongoose.
-- [ ] **Backend**: Create Mongoose model for `LocalItem`.
-- [ ] **Backend**: Implement the `/api/local-items` endpoint to fetch data from MongoDB.
-- [ ] **Frontend**: Create `LocalItem` and `LocalItemList` components.
-- [ ] **Frontend**: Implement data fetching logic to consume the backend API.
-- [ ] Display the fetched local items on the UI.
-- [ ] Write unit tests for backend Mongoose model and basic frontend components.
-- [ ] Implement initial loading/error states in the frontend.
+- [x] **Backend**: Implement MongoDB connection logic using Mongoose.
+- [x] **Backend**: Create Mongoose model for `LocalItem`.
+- [x] **Backend**: Implement the `/api/local-items` endpoint to fetch data from MongoDB.
+- [x] **Frontend**: Create `LocalItem` and `LocalItemList` components.
+- [x] **Frontend**: Implement data fetching logic to consume the backend API.
+- [x] Display the fetched local items on the UI.
+- [x] Write unit tests for backend Mongoose model and basic frontend components.
+- [x] Implement initial loading/error states in the frontend.
 
 ### Week 3: Core Feature Development + Deployment Prep
 - [ ] **Frontend**: Implement `SearchFilter` component and integrate it with `LocalItemList` for client-side filtering logic.
