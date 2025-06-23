@@ -14,6 +14,8 @@ const getFavourites = (): string[] => {
   }
 };
 
+const PAGE_SIZE = 10;
+
 const LocalItemList: React.FC = () => {
   const [items, setItems] = useState<ILocalItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,20 +23,41 @@ const LocalItemList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showFavourites, setShowFavourites] = useState(false);
   const [favourites, setFavourites] = useState<string[]>(getFavourites());
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const fetchItems = async (reset = false) => {
+    try {
+      if (reset) {
+        setLoading(true);
+        setSkip(0);
+      } else {
+        setLoadingMore(true);
+      }
+      const response = await axios.get<ILocalItem[]>(API_BASE_URL + `?limit=${PAGE_SIZE}&skip=${reset ? 0 : skip}`);
+      const newItems = response.data;
+      if (reset) {
+        setItems(newItems);
+        setHasMore(newItems.length === PAGE_SIZE);
+        setSkip(newItems.length);
+      } else {
+        setItems(prev => [...prev, ...newItems]);
+        setHasMore(newItems.length === PAGE_SIZE);
+        setSkip(prev => prev + newItems.length);
+      }
+    } catch (err: any) {
+      setError('Failed to fetch local data: ' + err.message);
+      console.error('Fetch error:', err);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get<ILocalItem[]>(API_BASE_URL);
-        setItems(response.data);
-      } catch (err: any) {
-        setError('Failed to fetch local data: ' + err.message);
-        console.error('Fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchItems();
+    fetchItems(true);
+    // eslint-disable-next-line
   }, []);
 
   // Listen for favourite changes in localStorage (in case multiple tabs)
@@ -116,6 +139,24 @@ const LocalItemList: React.FC = () => {
         filteredItems.map((item) => (
           <LocalItem key={item._id} item={item} />
         ))
+      )}
+      {hasMore && !showFavourites && !searchTerm && (
+        <div style={{ textAlign: 'center', margin: '20px 0' }}>
+          <button onClick={() => fetchItems(false)} disabled={loadingMore} style={{
+            padding: '10px 24px',
+            fontSize: '1.1em',
+            borderRadius: '20px',
+            border: '1.5px solid #6c63ff',
+            background: '#f7f7ff',
+            color: '#3b3b5c',
+            fontWeight: 600,
+            cursor: loadingMore ? 'not-allowed' : 'pointer',
+            opacity: loadingMore ? 0.6 : 1,
+            marginTop: 10
+          }}>
+            {loadingMore ? 'Loading...' : 'Load More'}
+          </button>
+        </div>
       )}
     </>
   );
