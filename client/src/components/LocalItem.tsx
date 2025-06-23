@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { LocalItem as ILocalItem } from '../types/localItem';
 
 interface LocalItemProps {
@@ -59,13 +59,45 @@ if (!document.head.querySelector('#modal-animations')) {
   document.head.appendChild(styleSheet);
 }
 
+const getFavourites = (): string[] => {
+  try {
+    return JSON.parse(localStorage.getItem('favouriteEvents') || '[]');
+  } catch {
+    return [];
+  }
+};
+
+const setFavourites = (ids: string[]) => {
+  localStorage.setItem('favouriteEvents', JSON.stringify(ids));
+};
+
 const LocalItem: React.FC<LocalItemProps> = ({ item }) => {
   const [showModal, setShowModal] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  useEffect(() => {
+    const favs = getFavourites();
+    setIsFavourite(favs.includes(item._id));
+  }, [item._id]);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowModal(false);
+  };
+
+  const toggleFavourite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const favs = getFavourites();
+    let updated;
+    if (favs.includes(item._id)) {
+      updated = favs.filter(id => id !== item._id);
+      setIsFavourite(false);
+    } else {
+      updated = [...favs, item._id];
+      setIsFavourite(true);
+    }
+    setFavourites(updated);
   };
 
   return (
@@ -89,6 +121,22 @@ const LocalItem: React.FC<LocalItemProps> = ({ item }) => {
         role="button"
         aria-label={`Open details for ${item.name}`}
       >
+        {/* Star indicator visible on card */}
+        <span
+          style={{
+            position: 'absolute',
+            top: 16,
+            left: 20,
+            fontSize: '1.7em',
+            color: isFavourite ? '#FFD600' : '#bbb',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            transition: 'color 0.2s',
+          }}
+          aria-label={isFavourite ? 'Favourited' : 'Not favourited'}
+        >
+          {isFavourite ? '★' : '☆'}
+        </span>
         <h3 style={{
           margin: '0 0 10px 0',
           color: '#3b3b5c',
@@ -129,6 +177,25 @@ const LocalItem: React.FC<LocalItemProps> = ({ item }) => {
             aria-label={`Details for ${item.name}`}
           >
             <button style={closeButtonStyle} onClick={handleCloseModal} aria-label="Close modal">&times;</button>
+            {/* Star button in modal */}
+            <button
+              onClick={toggleFavourite}
+              style={{
+                position: 'absolute',
+                top: 18,
+                left: 24,
+                background: 'none',
+                border: 'none',
+                fontSize: '2.1em',
+                color: isFavourite ? '#FFD600' : '#bbb',
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                zIndex: 1002,
+              }}
+              aria-label={isFavourite ? 'Remove from favourites' : 'Add to favourites'}
+            >
+              {isFavourite ? '★' : '☆'}
+            </button>
             <h2 style={{
               color: '#3b3b5c',
               fontSize: '2em',
