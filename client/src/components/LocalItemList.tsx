@@ -5,7 +5,7 @@ import LocalItem from './LocalItem';
 import type { LocalItem as ILocalItem } from '../types/localItem';
 import ReactDOM from 'react-dom';
 
-const API_BASE_URL = 'http://localhost:5000/api/local-items'; // Adjust if backend runs on different port
+const API_BASE_URL = 'http://54.221.74.132/api/local-items';
 
 const getFavourites = (): string[] => {
   try {
