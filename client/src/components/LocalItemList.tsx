@@ -75,7 +75,7 @@ const LocalItemList: React.FC = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+      <div style={{ width:'650px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
         <SearchFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         <button
           style={{
@@ -106,7 +106,8 @@ const LocalItemList: React.FC = () => {
             transform: showFavourites ? 'scale(1.25) rotate(-10deg)' : 'scale(1)',
             color: showFavourites ? '#FFD600' : '#bbb',
             textShadow: showFavourites ? '0 2px 8px #ffe066' : 'none',
-          }}>{showFavourites ? '★' : '☆'}</span> Show favourites
+          }}>{showFavourites ? '★' : '☆'}</span> 
+          Show favourites
         </button>
       </div>
       {filteredItems.length === 0 ? (

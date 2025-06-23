@@ -21,7 +21,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ searchTerm, onSearchChange 
         style={{
           padding: '14px 18px',
           width: '100%',
-          maxWidth: 400,
+          maxWidth: 450,
           borderRadius: '24px',
           border: '1.5px solid #6c63ff',
           background: '#fff',
