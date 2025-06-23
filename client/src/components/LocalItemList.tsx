@@ -3,6 +3,7 @@ import axios from 'axios';
 import SearchFilter from './SearchFilter';
 import LocalItem from './LocalItem';
 import type { LocalItem as ILocalItem } from '../types/localItem';
+import ReactDOM from 'react-dom';
 
 const API_BASE_URL = 'http://localhost:5000/api/local-items'; // Adjust if backend runs on different port
 
@@ -27,6 +28,7 @@ const LocalItemList: React.FC = () => {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const fetchItems = async (reset = false) => {
     try {
@@ -102,6 +104,18 @@ const LocalItemList: React.FC = () => {
     );
   }, [items, searchTerm, showFavourites, favourites]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      setShowScrollTop(window.scrollY > 200);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (loading) {
     return <div>Loading local data...</div>;
   }
@@ -171,6 +185,38 @@ const LocalItemList: React.FC = () => {
             {loadingMore ? 'Loading...' : 'Load More'}
           </button>
         </div>
+      )}
+      {showScrollTop && ReactDOM.createPortal(
+        <button
+          onClick={scrollToTop}
+          style={{
+            position: 'fixed',
+            bottom: 50,
+            right: 130,
+            zIndex: 1000,
+            background: '#6c63ff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '50%',
+            width: 48,
+            height: 48,
+            boxShadow: '0 2px 12px rgba(60,60,100,0.18)',
+            fontSize: 28,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'background 0.2s, transform 0.18s cubic-bezier(.4,1.3,.6,1)',
+            outline: 'none',
+          }}
+          aria-label="Scroll to top"
+          onMouseDown={e => e.currentTarget.style.transform = 'scale(0.85)'}
+          onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          ↑
+        </button>,
+        document.body
       )}
     </>
   );
