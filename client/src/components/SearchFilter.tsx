@@ -11,7 +11,6 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ searchTerm, onSearchChange 
       marginBottom: '32px',
       width: '100%',
       display: 'flex',
-      justifyContent: 'center',
       alignItems: 'center',
     }}>
       <input
