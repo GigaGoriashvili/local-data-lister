@@ -15,6 +15,7 @@ const getFavourites = (): string[] => {
 };
 
 const PAGE_SIZE = 10;
+const CACHE_KEY_PREFIX = 'localItemsPage_';
 
 const LocalItemList: React.FC = () => {
   const [items, setItems] = useState<ILocalItem[]>([]);
@@ -32,11 +33,24 @@ const LocalItemList: React.FC = () => {
       if (reset) {
         setLoading(true);
         setSkip(0);
+        // Clear cache on reset
+        Object.keys(sessionStorage)
+          .filter(key => key.startsWith(CACHE_KEY_PREFIX))
+          .forEach(key => sessionStorage.removeItem(key));
       } else {
         setLoadingMore(true);
       }
-      const response = await axios.get<ILocalItem[]>(API_BASE_URL + `?limit=${PAGE_SIZE}&skip=${reset ? 0 : skip}`);
-      const newItems = response.data;
+      const pageSkip = reset ? 0 : skip;
+      const cacheKey = `${CACHE_KEY_PREFIX}${pageSkip}`;
+      let newItems: ILocalItem[] = [];
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        newItems = JSON.parse(cached);
+      } else {
+        const response = await axios.get<ILocalItem[]>(API_BASE_URL + `?limit=${PAGE_SIZE}&skip=${pageSkip}`);
+        newItems = response.data;
+        sessionStorage.setItem(cacheKey, JSON.stringify(newItems));
+      }
       if (reset) {
         setItems(newItems);
         setHasMore(newItems.length === PAGE_SIZE);
