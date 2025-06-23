@@ -144,9 +144,9 @@
 - [x] Implement initial loading/error states in the frontend.
 
 ### Week 3: Core Feature Development + Deployment Prep
-- [ ] **Frontend**: Implement `SearchFilter` component and integrate it with `LocalItemList` for client-side filtering logic.
-- [ ] **Testing**: Write integration tests for backend API endpoint (using Supertest) and frontend data flow (API fetch -> list rendering -> filtering).
-- [ ] Begin AWS deployment setup: Configure EC2 instance, install Node.js/Nginx/PM2.
+- [x] **Frontend**: Implement `SearchFilter` component and integrate it with `LocalItemList` for client-side filtering logic.
+- [x] **Testing**: Write integration tests for backend API endpoint (using Supertest) and frontend data flow (API fetch -> list rendering -> filtering).
+- [x] Begin AWS deployment setup: Configure EC2 instance, install Node.js/Nginx/PM2.
 - [ ] Implement basic UI/UX improvements (e.g., responsive layout, card-like display for items).
 
 ### Week 4: Polish + Final Development
