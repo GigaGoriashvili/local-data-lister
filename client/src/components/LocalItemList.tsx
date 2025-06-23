@@ -50,8 +50,7 @@ const LocalItemList: React.FC = () => {
 
   return (
     <div>
-      <h2>Local Items</h2>
-      <SearchFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} /> {/* Integrate SearchFilter */}
+      <SearchFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       {filteredItems.length === 0 ? (
         <div>No matching items found.</div>
       ) : (
